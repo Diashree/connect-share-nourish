@@ -14,16 +14,265 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      claims: {
+        Row: {
+          claimed_at: string
+          completed_at: string | null
+          donation_id: string
+          id: string
+          ngo_id: string
+          status: Database["public"]["Enums"]["claim_status"]
+          volunteer_id: string | null
+        }
+        Insert: {
+          claimed_at?: string
+          completed_at?: string | null
+          donation_id: string
+          id?: string
+          ngo_id: string
+          status?: Database["public"]["Enums"]["claim_status"]
+          volunteer_id?: string | null
+        }
+        Update: {
+          claimed_at?: string
+          completed_at?: string | null
+          donation_id?: string
+          id?: string
+          ngo_id?: string
+          status?: Database["public"]["Enums"]["claim_status"]
+          volunteer_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "claims_donation_id_fkey"
+            columns: ["donation_id"]
+            isOneToOne: false
+            referencedRelation: "donations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      donations: {
+        Row: {
+          category: Database["public"]["Enums"]["donation_category"]
+          condition: string | null
+          created_at: string
+          description: string | null
+          details: Json
+          donor_id: string
+          expiry_date: string | null
+          id: string
+          images: string[]
+          lat: number | null
+          lng: number | null
+          pickup_address: string
+          quantity: string
+          size: string | null
+          status: Database["public"]["Enums"]["donation_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["donation_category"]
+          condition?: string | null
+          created_at?: string
+          description?: string | null
+          details?: Json
+          donor_id: string
+          expiry_date?: string | null
+          id?: string
+          images?: string[]
+          lat?: number | null
+          lng?: number | null
+          pickup_address: string
+          quantity: string
+          size?: string | null
+          status?: Database["public"]["Enums"]["donation_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["donation_category"]
+          condition?: string | null
+          created_at?: string
+          description?: string | null
+          details?: Json
+          donor_id?: string
+          expiry_date?: string | null
+          id?: string
+          images?: string[]
+          lat?: number | null
+          lng?: number | null
+          pickup_address?: string
+          quantity?: string
+          size?: string | null
+          status?: Database["public"]["Enums"]["donation_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      impact_logs: {
+        Row: {
+          category: Database["public"]["Enums"]["donation_category"]
+          completed_at: string
+          donation_id: string
+          donor_id: string
+          id: string
+          ngo_id: string
+          quantity: string | null
+          volunteer_id: string | null
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["donation_category"]
+          completed_at?: string
+          donation_id: string
+          donor_id: string
+          id?: string
+          ngo_id: string
+          quantity?: string | null
+          volunteer_id?: string | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["donation_category"]
+          completed_at?: string
+          donation_id?: string
+          donor_id?: string
+          id?: string
+          ngo_id?: string
+          quantity?: string | null
+          volunteer_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "impact_logs_donation_id_fkey"
+            columns: ["donation_id"]
+            isOneToOne: false
+            referencedRelation: "donations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          link: string | null
+          message: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          link?: string | null
+          message: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          link?: string | null
+          message?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          id: string
+          is_verified: boolean
+          name: string
+          org_name: string | null
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          id: string
+          is_verified?: boolean
+          name: string
+          org_name?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          id?: string
+          is_verified?: boolean
+          name?: string
+          org_name?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_primary_role: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "donor" | "ngo" | "volunteer" | "admin"
+      claim_status: "claimed" | "in_transit" | "completed" | "cancelled"
+      donation_category:
+        | "food"
+        | "clothes"
+        | "books"
+        | "medicines"
+        | "essentials"
+        | "electronics"
+      donation_status:
+        | "available"
+        | "claimed"
+        | "in_transit"
+        | "completed"
+        | "expired"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +399,24 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["donor", "ngo", "volunteer", "admin"],
+      claim_status: ["claimed", "in_transit", "completed", "cancelled"],
+      donation_category: [
+        "food",
+        "clothes",
+        "books",
+        "medicines",
+        "essentials",
+        "electronics",
+      ],
+      donation_status: [
+        "available",
+        "claimed",
+        "in_transit",
+        "completed",
+        "expired",
+      ],
+    },
   },
 } as const
