@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
+import { VolunteerOpportunities } from "./VolunteerOpportunities";
 
 export function VolunteerDashboard() {
   const { user, profile } = useAuth();
@@ -104,6 +105,8 @@ export function VolunteerDashboard() {
           </div>
         )}
       </section>
+
+      <VolunteerOpportunities />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { formatDistanceToNow } from "date-fns";
+import { NGOSuggestions } from "./NGOSuggestions";
 
 interface Donation {
   id: string;
@@ -88,6 +89,8 @@ export function DonorDashboard() {
           </ul>
         )}
       </div>
+
+      <NGOSuggestions />
     </div>
   );
 }

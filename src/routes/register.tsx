@@ -41,15 +41,23 @@ function RegisterPage() {
     if (error) { setLoading(false); return toast.error(error.message); }
     const userId = data.user?.id;
     if (userId) {
-      // Update profile and assign role
-      await supabase.from("profiles").update({
+      // Upsert profile (trigger may have already created a row)
+      await supabase.from("profiles").upsert({
+        id: userId,
         name: form.name,
         phone: form.phone || null,
         address: form.address || null,
         org_name: form.org || null,
         bio: form.bio || null,
-      }).eq("id", userId);
-      await supabase.from("user_roles").insert({ user_id: userId, role });
+      });
+      // Save role — upsert in case the row exists
+      const { error: roleErr } = await supabase
+        .from("user_roles")
+        .upsert({ user_id: userId, role }, { onConflict: "user_id,role" });
+      if (roleErr) {
+        setLoading(false);
+        return toast.error(`Could not save role: ${roleErr.message}`);
+      }
     }
     setLoading(false);
     toast.success(
