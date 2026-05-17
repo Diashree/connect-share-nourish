@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
+import { SupportingDonors } from "./SupportingDonors";
 
 interface Donation {
   id: string; title: string; category: string; quantity: string;
@@ -96,6 +97,8 @@ export function NGODashboard() {
           </div>
         )}
       </section>
+
+      <SupportingDonors />
     </div>
   );
 }
