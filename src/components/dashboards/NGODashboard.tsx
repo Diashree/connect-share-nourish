@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 import { SupportingDonors } from "./SupportingDonors";
+import { IncomingRequests } from "@/components/requests/IncomingRequests";
 
 interface Donation {
   id: string; title: string; category: string; quantity: string;
@@ -78,6 +79,8 @@ export function NGODashboard() {
           </div>
         )}
       </section>
+
+      <IncomingRequests />
 
       <section>
         <h2 className="font-display text-2xl font-semibold mb-4">My claims</h2>

@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Sprout, LogOut, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
+import { NotificationsBell } from "@/components/NotificationsBell";
 
 export function SiteHeader() {
   const { session, signOut } = useAuth();
@@ -24,6 +25,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           {session ? (
             <>
+              <NotificationsBell />
               <Button asChild variant="ghost" size="sm">
                 <Link to="/dashboard"><LayoutDashboard className="h-4 w-4 mr-1.5" />Dashboard</Link>
               </Button>
