@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Sprout, HeartHandshake, Truck, MapPin, ArrowRight, Leaf, Users, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/SiteHeader";
+import { RaiseRequestSection } from "@/components/requests/RaiseRequestSection";
 
 export const Route = createFileRoute("/")({ component: Landing });
 
@@ -65,6 +66,8 @@ function Landing() {
           </div>
         </div>
       </section>
+
+      <RaiseRequestSection />
 
       {/* IMPACT */}
       <section id="impact" className="border-t border-border/60">

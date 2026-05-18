@@ -16,30 +16,66 @@ export type Database = {
     Tables: {
       claims: {
         Row: {
+          category: string | null
           claimed_at: string
           completed_at: string | null
-          donation_id: string
+          concern_details: string | null
+          contact_number: string | null
+          donation_id: string | null
           id: string
-          ngo_id: string
+          latitude: number | null
+          location_text: string | null
+          longitude: number | null
+          ngo_id: string | null
+          photo_urls: string[] | null
+          request_title: string | null
+          requester_id: string | null
+          requester_name: string | null
+          responded_ngo_id: string | null
           status: Database["public"]["Enums"]["claim_status"]
+          urgency: string | null
           volunteer_id: string | null
         }
         Insert: {
+          category?: string | null
           claimed_at?: string
           completed_at?: string | null
-          donation_id: string
+          concern_details?: string | null
+          contact_number?: string | null
+          donation_id?: string | null
           id?: string
-          ngo_id: string
+          latitude?: number | null
+          location_text?: string | null
+          longitude?: number | null
+          ngo_id?: string | null
+          photo_urls?: string[] | null
+          request_title?: string | null
+          requester_id?: string | null
+          requester_name?: string | null
+          responded_ngo_id?: string | null
           status?: Database["public"]["Enums"]["claim_status"]
+          urgency?: string | null
           volunteer_id?: string | null
         }
         Update: {
+          category?: string | null
           claimed_at?: string
           completed_at?: string | null
-          donation_id?: string
+          concern_details?: string | null
+          contact_number?: string | null
+          donation_id?: string | null
           id?: string
-          ngo_id?: string
+          latitude?: number | null
+          location_text?: string | null
+          longitude?: number | null
+          ngo_id?: string | null
+          photo_urls?: string[] | null
+          request_title?: string | null
+          requester_id?: string | null
+          requester_name?: string | null
+          responded_ngo_id?: string | null
           status?: Database["public"]["Enums"]["claim_status"]
+          urgency?: string | null
           volunteer_id?: string | null
         }
         Relationships: [
@@ -160,6 +196,9 @@ export type Database = {
           is_read: boolean
           link: string | null
           message: string
+          ngo_id: string | null
+          related_claim_id: string | null
+          title: string | null
           type: string
           user_id: string
         }
@@ -169,6 +208,9 @@ export type Database = {
           is_read?: boolean
           link?: string | null
           message: string
+          ngo_id?: string | null
+          related_claim_id?: string | null
+          title?: string | null
           type?: string
           user_id: string
         }
@@ -178,6 +220,9 @@ export type Database = {
           is_read?: boolean
           link?: string | null
           message?: string
+          ngo_id?: string | null
+          related_claim_id?: string | null
+          title?: string | null
           type?: string
           user_id?: string
         }
@@ -259,7 +304,14 @@ export type Database = {
     }
     Enums: {
       app_role: "donor" | "ngo" | "volunteer" | "admin"
-      claim_status: "claimed" | "in_transit" | "completed" | "cancelled"
+      claim_status:
+        | "claimed"
+        | "in_transit"
+        | "completed"
+        | "cancelled"
+        | "pending"
+        | "approved"
+        | "rejected"
       donation_category:
         | "food"
         | "clothes"
@@ -401,7 +453,15 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["donor", "ngo", "volunteer", "admin"],
-      claim_status: ["claimed", "in_transit", "completed", "cancelled"],
+      claim_status: [
+        "claimed",
+        "in_transit",
+        "completed",
+        "cancelled",
+        "pending",
+        "approved",
+        "rejected",
+      ],
       donation_category: [
         "food",
         "clothes",
