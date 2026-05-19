@@ -19,7 +19,7 @@ const ROLE_BADGE: Record<AppRole, string> = {
 };
 
 function DashboardPage() {
-  const { session, role, profile, user, loading, refresh } = useAuth();
+  const { session, role, profile, loading } = useAuth();
   const nav = useNavigate();
 
   useEffect(() => {
