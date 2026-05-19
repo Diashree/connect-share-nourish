@@ -59,7 +59,7 @@ function RegisterPage() {
         emailRedirectTo: `${window.location.origin}/dashboard`,
         data: { 
           name: form.name,
-          role: role // Included in metadata so backend triggers can read it if needed
+          role: role 
         },
       },
     });
@@ -81,22 +81,44 @@ function RegisterPage() {
           address: form.address || null,
           org_name: form.org || null,
           bio: form.bio || null,
-        }, { onConflict: "id" });
+        }, { onConflict: "id" }); // 'id' is standard primary key, so this is safe
 
-        // 3. Safely Upsert Role (prevents the duplicate key crash)
-        const { error: roleErr } = await supabase
+        // 3. Frontend-managed Upsert for user_roles (No database constraint required)
+        // First, check if a role entry already exists for this user
+        const { data: existingRole, error: fetchErr } = await supabase
           .from("user_roles")
-          .upsert(
-            { user_id: userId, role: role }, 
-            { onConflict: "user_id" } // Targets the unique constraint on user_id directly
-          );
+          .select("id")
+          .eq("user_id", userId)
+          .maybeSingle();
+
+        if (fetchErr) {
+          setLoading(false);
+          return toast.error(`Error checking user role: ${fetchErr.message}`);
+        }
+
+        let roleErr;
+
+        if (existingRole) {
+          // If row exists, update it filtering by user_id
+          const { error: updateErr } = await supabase
+            .from("user_roles")
+            .update({ role: role })
+            .eq("user_id", userId);
+          roleErr = updateErr;
+        } else {
+          // If no row exists, safely insert it
+          const { error: insertErr } = await supabase
+            .from("user_roles")
+            .insert({ user_id: userId, role: role });
+          roleErr = insertErr;
+        }
 
         if (roleErr) {
           setLoading(false);
           return toast.error(`Could not save role: ${roleErr.message}`);
         }
       } catch (err) {
-        console.error("Database upsert step encountered an error:", err);
+        console.error("Database step encountered an error:", err);
       }
     }
 
