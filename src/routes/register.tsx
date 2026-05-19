@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import type { AppRole } from "@/lib/auth";
+import { useAuth, type AppRole } from "@/lib/auth";
 
 export const Route = createFileRoute("/register")({ component: RegisterPage });
 
