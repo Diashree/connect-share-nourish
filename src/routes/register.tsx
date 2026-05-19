@@ -128,6 +128,7 @@ function RegisterPage() {
     localStorage.removeItem("reg_step");
 
     setLoading(false);
+    await refresh();
     toast.success(
       role === "donor"
         ? "Account created! Welcome."
