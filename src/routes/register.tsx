@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sprout, Home, Building2, Bike, ShieldCheck, ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,10 +19,30 @@ const ROLES: { id: AppRole; title: string; desc: string; icon: typeof Home }[] =
 
 function RegisterPage() {
   const nav = useNavigate();
-  const [role, setRole] = useState<AppRole | null>(null);
-  const [step, setStep] = useState<1 | 2>(1);
+  
+  // Initialize state from localStorage to prevent resetting on page reloads/redirects
+  const [role, setRoleState] = useState<AppRole | null>(() => {
+    return (localStorage.getItem("reg_role") as AppRole) || null;
+  });
+  const [step, setStepState] = useState<1 | 2>(() => {
+    const savedStep = localStorage.getItem("reg_step");
+    return savedStep === "2" ? 2 : 1;
+  });
+
   const [form, setForm] = useState({ name: "", email: "", password: "", phone: "", address: "", org: "", bio: "" });
   const [loading, setLoading] = useState(false);
+
+  // Wrapper setters that also save to localStorage
+  const setRole = (newRole: AppRole | null) => {
+    setRoleState(newRole);
+    if (newRole) localStorage.setItem("reg_role", newRole);
+    else localStorage.removeItem("reg_role");
+  };
+
+  const setStep = (newStep: 1 | 2) => {
+    setStepState(newStep);
+    localStorage.setItem("reg_step", String(newStep));
+  };
 
   const set = <K extends keyof typeof form>(k: K, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -79,6 +99,10 @@ function RegisterPage() {
         console.error("Database upsert step encountered an error:", err);
       }
     }
+
+    // Registration succeeded: Clear storage elements
+    localStorage.removeItem("reg_role");
+    localStorage.removeItem("reg_step");
 
     setLoading(false);
     toast.success(
