@@ -19,6 +19,7 @@ const ROLES: { id: AppRole; title: string; desc: string; icon: typeof Home }[] =
 
 function RegisterPage() {
   const nav = useNavigate();
+  const { refresh } = useAuth();
   
   // Initialize state from localStorage to prevent resetting on page reloads/redirects
   const [role, setRoleState] = useState<AppRole | null>(() => {
