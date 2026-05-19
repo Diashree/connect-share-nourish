@@ -62,43 +62,7 @@ function DashboardPage() {
         {role === "ngo" && <NGODashboard />}
         {role === "volunteer" && <VolunteerDashboard />}
         {role === "admin" && <AdminDashboard />}
-        {!role && user && <CompleteProfile userId={user.id} onSaved={refresh} />}
       </main>
-    </div>
-  );
-}
-
-function CompleteProfile({ userId, onSaved }: { userId: string; onSaved: () => Promise<void> }) {
-  const [picked, setPicked] = useState<AppRole | "">("");
-  const [saving, setSaving] = useState(false);
-
-  const save = async () => {
-    if (!picked) return;
-    setSaving(true);
-    const { error } = await supabase.from("user_roles").insert({ user_id: userId, role: picked });
-    setSaving(false);
-    if (error) return toast.error(error.message);
-    toast.success("Role saved!");
-    await onSaved();
-  };
-
-  return (
-    <div className="card-warm p-10 max-w-md mx-auto text-center">
-      <h2 className="font-display text-2xl font-semibold">Complete your profile</h2>
-      <p className="text-muted-foreground text-sm mt-2">Pick how you'd like to participate in FoodConnect+.</p>
-      <div className="mt-6 space-y-3 text-left">
-        <Select value={picked} onValueChange={(v) => setPicked(v as AppRole)}>
-          <SelectTrigger><SelectValue placeholder="Select your role" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="donor">Donor</SelectItem>
-            <SelectItem value="ngo">NGO / Receiver</SelectItem>
-            <SelectItem value="volunteer">Volunteer</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button onClick={save} disabled={!picked || saving} className="w-full bg-warm-gradient text-primary-foreground hover:opacity-90">
-          {saving ? "Saving…" : "Save role"}
-        </Button>
-      </div>
     </div>
   );
 }
