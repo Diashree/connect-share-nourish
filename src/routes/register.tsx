@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import type { AppRole } from "@/lib/auth";
+import { useAuth, type AppRole } from "@/lib/auth";
 
 export const Route = createFileRoute("/register")({ component: RegisterPage });
 
@@ -19,6 +19,7 @@ const ROLES: { id: AppRole; title: string; desc: string; icon: typeof Home }[] =
 
 function RegisterPage() {
   const nav = useNavigate();
+  const { refresh } = useAuth();
   
   // Initialize state from localStorage to prevent resetting on page reloads/redirects
   const [role, setRoleState] = useState<AppRole | null>(() => {
@@ -127,6 +128,7 @@ function RegisterPage() {
     localStorage.removeItem("reg_step");
 
     setLoading(false);
+    await refresh();
     toast.success(
       role === "donor"
         ? "Account created! Welcome."
