@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth, type AppRole } from "@/lib/auth";
 import { SiteHeader } from "@/components/SiteHeader";
 import { DonorDashboard } from "@/components/dashboards/DonorDashboard";
@@ -8,10 +8,6 @@ import { VolunteerDashboard } from "@/components/dashboards/VolunteerDashboard";
 import { AdminDashboard } from "@/components/dashboards/AdminDashboard";
 import { ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/dashboard")({ component: DashboardPage });
 
