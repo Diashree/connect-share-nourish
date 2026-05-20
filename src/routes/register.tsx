@@ -30,7 +30,7 @@ function RegisterPage() {
     return savedStep === "2" ? 2 : 1;
   });
 
-  const [form, setForm] = useState({ name: "", email: "", password: "", phone: "", address: "", org: "", bio: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", phone: "", address: "", org: "", bio: "", id_proof_type: "aadhar", id_proof_number: "" });
   const [loading, setLoading] = useState(false);
 
   // Wrapper setters that also save to localStorage
