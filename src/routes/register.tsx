@@ -50,6 +50,18 @@ function RegisterPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!role) return;
+
+    // Volunteer ID-proof validation
+    if (role === "volunteer") {
+      const num = form.id_proof_number.trim();
+      if (form.id_proof_type === "aadhar" && !/^\d{12}$/.test(num.replace(/\s/g, ""))) {
+        return toast.error("Please enter a valid 12-digit Aadhaar number");
+      }
+      if (form.id_proof_type === "pan" && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(num.toUpperCase())) {
+        return toast.error("Please enter a valid PAN (e.g. ABCDE1234F)");
+      }
+    }
+
     setLoading(true);
 
     // 1. Sign up user in Supabase Auth
