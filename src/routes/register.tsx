@@ -316,6 +316,41 @@ function RegisterPage() {
                     />
                   </div>
                 )}
+                {role === "volunteer" && (
+                  <div className="rounded-xl border border-amber/30 bg-amber/5 p-4 space-y-3">
+                    <div className="flex items-start gap-2">
+                      <ShieldCheck className="h-4 w-4 text-amber-foreground mt-0.5 flex-shrink-0" />
+                      <p className="text-sm text-muted-foreground">For trust & safety, volunteers must submit a valid government ID.</p>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      <div>
+                        <Label htmlFor="id_proof_type">ID type</Label>
+                        <select
+                          id="id_proof_type"
+                          value={form.id_proof_type}
+                          onChange={(e) => set("id_proof_type", e.target.value)}
+                          className="mt-1.5 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                          required
+                        >
+                          <option value="aadhar">Aadhaar Card</option>
+                          <option value="pan">PAN Card</option>
+                        </select>
+                      </div>
+                      <div>
+                        <Label htmlFor="id_proof_number">ID number</Label>
+                        <Input
+                          id="id_proof_number"
+                          required
+                          value={form.id_proof_number}
+                          onChange={(e) => set("id_proof_number", e.target.value)}
+                          placeholder={form.id_proof_type === "aadhar" ? "12-digit Aadhaar" : "ABCDE1234F"}
+                          className="mt-1.5"
+                          maxLength={20}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <Button
                   type="submit"
                   disabled={loading}
