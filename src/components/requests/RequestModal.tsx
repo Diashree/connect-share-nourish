@@ -44,6 +44,7 @@ export function RequestModal({ category, open, onOpenChange }: Props) {
   const reset = () => {
     setName(""); setPhone(""); setAddress(""); setLat(null); setLng(null);
     setDetails(""); setUrgency("medium"); setPhotos([]);
+    setMedicineExpiry(""); setFoodPreparedAt(""); setFoodExpiresAt(""); setPeopleCount("");
   };
 
   const useMyLocation = () => {
