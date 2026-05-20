@@ -32,6 +32,11 @@ export function RequestModal({ category, open, onOpenChange }: Props) {
   const [photos, setPhotos] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [locating, setLocating] = useState(false);
+  // Category-specific
+  const [medicineExpiry, setMedicineExpiry] = useState("");
+  const [foodPreparedAt, setFoodPreparedAt] = useState("");
+  const [foodExpiresAt, setFoodExpiresAt] = useState("");
+  const [peopleCount, setPeopleCount] = useState("");
 
   if (!category) return null;
   const Icon = category.icon;
