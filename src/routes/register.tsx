@@ -94,7 +94,9 @@ function RegisterPage() {
           address: form.address || null,
           org_name: form.org || null,
           bio: form.bio || null,
-        }, { onConflict: "id" }); // 'id' is standard primary key, so this is safe
+          id_proof_type: role === "volunteer" ? form.id_proof_type : null,
+          id_proof_number: role === "volunteer" ? form.id_proof_number.trim() : null,
+        } as never, { onConflict: "id" }); // 'id' is standard primary key, so this is safe
 
         // 3. Frontend-managed Upsert for user_roles (No database constraint required)
         // First, check if a role entry already exists for this user
