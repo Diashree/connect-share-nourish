@@ -22,6 +22,7 @@ export type Database = {
           concern_details: string | null
           contact_number: string | null
           donation_id: string | null
+          extras: Json
           id: string
           latitude: number | null
           location_text: string | null
@@ -43,6 +44,7 @@ export type Database = {
           concern_details?: string | null
           contact_number?: string | null
           donation_id?: string | null
+          extras?: Json
           id?: string
           latitude?: number | null
           location_text?: string | null
@@ -64,6 +66,7 @@ export type Database = {
           concern_details?: string | null
           contact_number?: string | null
           donation_id?: string | null
+          extras?: Json
           id?: string
           latitude?: number | null
           location_text?: string | null
@@ -235,6 +238,8 @@ export type Database = {
           bio: string | null
           created_at: string
           id: string
+          id_proof_number: string | null
+          id_proof_type: string | null
           is_verified: boolean
           name: string
           org_name: string | null
@@ -247,6 +252,8 @@ export type Database = {
           bio?: string | null
           created_at?: string
           id: string
+          id_proof_number?: string | null
+          id_proof_type?: string | null
           is_verified?: boolean
           name: string
           org_name?: string | null
@@ -259,6 +266,8 @@ export type Database = {
           bio?: string | null
           created_at?: string
           id?: string
+          id_proof_number?: string | null
+          id_proof_type?: string | null
           is_verified?: boolean
           name?: string
           org_name?: string | null
