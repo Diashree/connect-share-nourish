@@ -32,6 +32,11 @@ export function RequestModal({ category, open, onOpenChange }: Props) {
   const [photos, setPhotos] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [locating, setLocating] = useState(false);
+  // Category-specific
+  const [medicineExpiry, setMedicineExpiry] = useState("");
+  const [foodPreparedAt, setFoodPreparedAt] = useState("");
+  const [foodExpiresAt, setFoodExpiresAt] = useState("");
+  const [peopleCount, setPeopleCount] = useState("");
 
   if (!category) return null;
   const Icon = category.icon;
@@ -39,6 +44,7 @@ export function RequestModal({ category, open, onOpenChange }: Props) {
   const reset = () => {
     setName(""); setPhone(""); setAddress(""); setLat(null); setLng(null);
     setDetails(""); setUrgency("medium"); setPhotos([]);
+    setMedicineExpiry(""); setFoodPreparedAt(""); setFoodExpiresAt(""); setPeopleCount("");
   };
 
   const useMyLocation = () => {
@@ -83,6 +89,15 @@ export function RequestModal({ category, open, onOpenChange }: Props) {
         photo_urls.push(pub.publicUrl);
       }
 
+      // Build category-specific extras
+      const extras: Record<string, unknown> = {};
+      if (category.key === "health" && medicineExpiry) extras.medicine_expiry_date = medicineExpiry;
+      if (category.key === "food_shelter") {
+        if (foodPreparedAt) extras.food_prepared_at = foodPreparedAt;
+        if (foodExpiresAt) extras.food_expires_at = foodExpiresAt;
+        if (peopleCount) extras.people_count = Number(peopleCount);
+      }
+
       // Insert claim
       const { data: claim, error: insErr } = await supabase.from("claims").insert({
         requester_id: user.id,
@@ -97,6 +112,7 @@ export function RequestModal({ category, open, onOpenChange }: Props) {
         photo_urls,
         concern_details: details.trim(),
         status: "pending",
+        extras,
       } as never).select("id").single();
       if (insErr) throw insErr;
 
@@ -188,6 +204,27 @@ export function RequestModal({ category, open, onOpenChange }: Props) {
           <Field label={`${category.detailsLabel} *`}>
             <Textarea value={details} onChange={(e) => setDetails(e.target.value)} placeholder={category.detailsPlaceholder} rows={4} maxLength={1500} />
           </Field>
+
+          {category.key === "health" && (
+            <Field label="Medicine Expiry Date">
+              <Input type="date" value={medicineExpiry} onChange={(e) => setMedicineExpiry(e.target.value)} />
+              <p className="text-xs text-muted-foreground mt-1">If your request involves medicines, mention when they expire.</p>
+            </Field>
+          )}
+
+          {category.key === "food_shelter" && (
+            <>
+              <Field label="When was the food prepared?">
+                <Input type="datetime-local" value={foodPreparedAt} onChange={(e) => setFoodPreparedAt(e.target.value)} />
+              </Field>
+              <Field label="When will the food expire?">
+                <Input type="datetime-local" value={foodExpiresAt} onChange={(e) => setFoodExpiresAt(e.target.value)} />
+              </Field>
+              <Field label="How many people was it made for?">
+                <Input type="number" min={1} max={10000} value={peopleCount} onChange={(e) => setPeopleCount(e.target.value)} placeholder="e.g. 25" />
+              </Field>
+            </>
+          )}
 
           <Field label="Urgency Level">
             <Select value={urgency} onValueChange={setUrgency}>

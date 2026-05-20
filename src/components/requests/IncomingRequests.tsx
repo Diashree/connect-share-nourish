@@ -64,6 +64,8 @@ export function IncomingRequests() {
 
     const cat = getCategory(row.category)?.label ?? "your";
     const ngoName = profile?.org_name || profile?.name || "An NGO";
+
+    // Notify the requester
     await supabase.from("notifications").insert({
       user_id: row.requester_id,
       type: accept ? "request_accepted" : "request_rejected",
@@ -76,7 +78,26 @@ export function IncomingRequests() {
       link: "/dashboard",
     } as never);
 
-    toast.success(accept ? "Request accepted" : "Request rejected");
+    // On accept, fan-out notifications to all volunteers
+    if (accept) {
+      const { data: volRoles } = await supabase.from("user_roles").select("user_id").eq("role", "volunteer");
+      const volIds = (volRoles ?? []).map((r) => r.user_id);
+      if (volIds.length > 0) {
+        await supabase.from("notifications").insert(
+          volIds.map((uid) => ({
+            user_id: uid,
+            type: "new_volunteer_task",
+            title: `New ${cat} task available`,
+            message: `${ngoName} accepted a ${cat} request — volunteers needed!`,
+            related_claim_id: row.id,
+            ngo_id: user.id,
+            link: "/dashboard",
+          })) as never,
+        );
+      }
+    }
+
+    toast.success(accept ? "Request accepted — volunteers notified" : "Request rejected");
     setActing(null);
     setActive(null);
     load();
