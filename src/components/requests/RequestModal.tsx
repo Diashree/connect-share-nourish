@@ -205,6 +205,27 @@ export function RequestModal({ category, open, onOpenChange }: Props) {
             <Textarea value={details} onChange={(e) => setDetails(e.target.value)} placeholder={category.detailsPlaceholder} rows={4} maxLength={1500} />
           </Field>
 
+          {category.key === "health" && (
+            <Field label="Medicine Expiry Date">
+              <Input type="date" value={medicineExpiry} onChange={(e) => setMedicineExpiry(e.target.value)} />
+              <p className="text-xs text-muted-foreground mt-1">If your request involves medicines, mention when they expire.</p>
+            </Field>
+          )}
+
+          {category.key === "food_shelter" && (
+            <>
+              <Field label="When was the food prepared?">
+                <Input type="datetime-local" value={foodPreparedAt} onChange={(e) => setFoodPreparedAt(e.target.value)} />
+              </Field>
+              <Field label="When will the food expire?">
+                <Input type="datetime-local" value={foodExpiresAt} onChange={(e) => setFoodExpiresAt(e.target.value)} />
+              </Field>
+              <Field label="How many people was it made for?">
+                <Input type="number" min={1} max={10000} value={peopleCount} onChange={(e) => setPeopleCount(e.target.value)} placeholder="e.g. 25" />
+              </Field>
+            </>
+          )}
+
           <Field label="Urgency Level">
             <Select value={urgency} onValueChange={setUrgency}>
               <SelectTrigger><SelectValue /></SelectTrigger>
