@@ -89,6 +89,15 @@ export function RequestModal({ category, open, onOpenChange }: Props) {
         photo_urls.push(pub.publicUrl);
       }
 
+      // Build category-specific extras
+      const extras: Record<string, unknown> = {};
+      if (category.key === "health" && medicineExpiry) extras.medicine_expiry_date = medicineExpiry;
+      if (category.key === "food_shelter") {
+        if (foodPreparedAt) extras.food_prepared_at = foodPreparedAt;
+        if (foodExpiresAt) extras.food_expires_at = foodExpiresAt;
+        if (peopleCount) extras.people_count = Number(peopleCount);
+      }
+
       // Insert claim
       const { data: claim, error: insErr } = await supabase.from("claims").insert({
         requester_id: user.id,
@@ -103,6 +112,7 @@ export function RequestModal({ category, open, onOpenChange }: Props) {
         photo_urls,
         concern_details: details.trim(),
         status: "pending",
+        extras,
       } as never).select("id").single();
       if (insErr) throw insErr;
 
